@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\SpectrumBalancer;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -39,28 +40,34 @@ Route::post('/index', function () {
 });
 
 Route::get('/dashboard', function () {
-/*
-$requests = intval((100 * Session::get('TodayRequests')) / Session::get('TopRequests'));
-$attacks = intval((100 * Session::get('TodayAttacks')) / Session::get('TopAttacks'));
-$floods = intval((100 * Session::get('TodayFloods')) / Session::get('TopFloods'));
+    // Esto debería pasarse a un controlador, pero no he tenido tiempo
 
-if ($requests > 100) {
-$requests = 100;
-}
+    $requests = 0;
+    $attacks = 0;
+    $floods = 0;
 
-if ($attacks > 100) {
-$attacks = 100;
-}
+    try {
+        $requests = intval((100 * Session::get('TodayRequests')) / Session::get('TopRequests'));
+    } catch (Exception $e) {
+        $requests = 0;
+    }
+    try {
+        $attacks = intval((100 * Session::get('TodayAttacks')) / Session::get('TopAttacks'));
+    } catch (Exception $e) {
+        $attacks = 0;
+    }
+    try {
+        $floods = intval((100 * Session::get('TodayFloods')) / Session::get('TopFloods'));
+    } catch (Exception $e) {
+        $floods = 0;
+    }
 
-if ($floods > 100) {
-$floods = 100;
-}
- */
-    $requests = 100;
-    $floods = 100;
-    $attacks = 100;
-
-    return view('dashboard', ['requests' => $requests, 'attacks' => $attacks, 'floods' => $floods]);
+    return view('dashboard', [
+        'requests' => ($requests > 1000) ? 100 : $requests,
+        'attacks' => ($attacks > 1000) ? 100 : $attacks,
+        'floods' => ($floods > 1000) ? 100 : $floods,
+        'balancers' => SpectrumBalancer::where('SpectrumKey', '=', Session::get('SpectrumKey'))->get(),
+    ]);
 })->middleware('auth');
 
 Route::get('/logout', [App\Http\Controllers\LogoutController::class, 'logout'])->name('logout');
@@ -68,5 +75,3 @@ Route::post('/logout', [App\Http\Controllers\LogoutController::class, 'logout'])
 
 //Auth::routes();
 Route::post('/user/login', [App\Http\Controllers\Auth\LoginController::class, 'authenticate']);
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
