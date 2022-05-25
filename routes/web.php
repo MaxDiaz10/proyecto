@@ -31,6 +31,10 @@ Route::post('/index', function () {
     return (!Auth::check()) ? view('index') : redirect('/dashboard');
 });
 
+Route::get('/new', function () {
+    return (!Auth::check()) ? view('new') : redirect('/dashboard');
+});
+
 Route::get('/dashboard', function () {
     // Esto debería pasarse a un controlador, pero no he tenido tiempo
     $clientData = Session::get('spectrum');

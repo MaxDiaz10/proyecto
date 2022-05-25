@@ -22,18 +22,19 @@
             <div id="head">
                 <div id="logo">Spectrum WEB</div>
                 <nav>
-                    <a href="/new">¡Regístrate Ahora!</a>
+                    <a href="/">Inicia sesión</a>
                 </nav>
             </div>
         </header>
         <div class="content">
             <div class="login-box">
-                <form action="/" id="users" method="POST">
-                    <div class="area" style="width: 100%;margin-bottom: 20px;">Inicia sesión <span id="login-error"></span><span id="login-ok"></span></div>
-                    <input type="text" name="email" placeholder="Client Name" style="margin-bottom: 15px;" required="required">
-                    <input type="password" name="password" placeholder="Client Key" style="margin-bottom: 15px;" required="required">
+                <form action="#" id="users" method="POST">
+                    <div class="area" style="width: 100%;margin-bottom: 20px;">Crea una cuenta ahora <span id="login-error"></span><span id="login-ok"></span></div>
+                    <input type="text" name="email" placeholder="Usuario" style="margin-bottom: 15px;" required="required">
+                    <input type="password" name="password" placeholder="Contraseña" style="margin-bottom: 15px;" required="required">
+                    <input type="email" name="email" placeholder="Email" style="margin-bottom: 15px;" required="required">
                     <input name="_token" type="hidden" value="{{ csrf_token() }}"/>
-                    <input id="filter-submit" type="submit" value="CONECTATE">
+                    <input id="filter-submit" type="submit" value="REGISTRARME">
                 </form>
                 <img id="spectrum-image" src="{{ asset('img/foz.jpg') }}">
             </div>
