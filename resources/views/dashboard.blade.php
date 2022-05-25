@@ -44,7 +44,7 @@
                         </div>
                     </div>
                     <div class="dash-box">
-                        <div id="attack-graphic" class="progress-circle @if ($attacks > 50) over50 @endif p{{ $attacks }}">
+                        <div id="attack-graphic" class="progress-circle {{ ($attacks > 50) ? 'over50' : '' }} p{{ $attacks }}">
                            <span>{{ $attacks }}%</span>
                            <div class="left-half-clipper">
                               <div class="first50-bar"></div>
@@ -58,7 +58,7 @@
                         </div>
                     </div>
                     <div class="dash-box">
-                    <div id="flood-graphic" class="progress-circle @if ($floods > 50) over50 @endif p{{ $floods }}">
+                    <div id="flood-graphic" class="progress-circle {{ ($floods > 50) ? 'over50' : '' }} p{{ $floods }}">
                         <span>{{ $floods }}%</span>
                         <div class="left-half-clipper">
                             <div class="first50-bar"></div>
@@ -97,8 +97,7 @@
                 </div>
             </div>
             </div>
-
-            <footer>Spectrum Web by Máx Díaz © 2022</footer>-
+            <footer>Spectrum Web by Máx Díaz © 2022</footer>
         </div>
     </div>
 </body>

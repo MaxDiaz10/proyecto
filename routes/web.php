@@ -16,48 +16,42 @@ use Illuminate\Support\Facades\Route;
  */
 
 Route::get('/', function () {
-    if (!Auth::check()) {
-        return view('index');
-    } else {
-        return redirect('/dashboard');
-    }
+    return (!Auth::check()) ? view('index') : redirect('/dashboard');
+});
+
+Route::post('/', function () {
+    return (!Auth::check()) ? view('index') : redirect('/dashboard');
 });
 
 Route::get('/index', function () {
-    if (!Auth::check()) {
-        return redirect('/');
-    } else {
-        return redirect('/dashboard');
-    }
+    return (!Auth::check()) ? view('index') : redirect('/dashboard');
 });
 
 Route::post('/index', function () {
-    if (!Auth::check()) {
-        return redirect('/');
-    } else {
-        return redirect('/dashboard');
-    }
+    return (!Auth::check()) ? view('index') : redirect('/dashboard');
 });
 
 Route::get('/dashboard', function () {
     // Esto debería pasarse a un controlador, pero no he tenido tiempo
+    $clientData = Session::get('spectrum');
 
     $requests = 0;
     $attacks = 0;
     $floods = 0;
 
+    // El control de errores podría ser muchísmo mejor, pero lo mismo de antes
     try {
-        $requests = intval((100 * Session::get('TodayRequests')) / Session::get('TopRequests'));
+        $requests = intval((100 * $clientData->TodayRequests) / $clientData->TopRequests);
     } catch (Exception $e) {
         $requests = 0;
     }
     try {
-        $attacks = intval((100 * Session::get('TodayAttacks')) / Session::get('TopAttacks'));
+        $attacks = intval((100 * $clientData->TodayAttacks) / $clientData->TopAttacks);
     } catch (Exception $e) {
         $attacks = 0;
     }
     try {
-        $floods = intval((100 * Session::get('TodayFloods')) / Session::get('TopFloods'));
+        $floods = intval((100 * $clientData->TodayFloods) / $clientData->TopFloods);
     } catch (Exception $e) {
         $floods = 0;
     }
@@ -66,8 +60,12 @@ Route::get('/dashboard', function () {
         'requests' => ($requests > 1000) ? 100 : $requests,
         'attacks' => ($attacks > 1000) ? 100 : $attacks,
         'floods' => ($floods > 1000) ? 100 : $floods,
-        'balancers' => SpectrumBalancer::where('SpectrumKey', '=', Session::get('SpectrumKey'))->get(),
+        'balancers' => SpectrumBalancer::where('SpectrumKey', '=', $clientData->SpectrumKey)->get(),
     ]);
+})->middleware('auth');
+
+Route::get('/ban-list', function () {
+    return view('bans');
 })->middleware('auth');
 
 Route::get('/logout', [App\Http\Controllers\LogoutController::class, 'logout'])->name('logout');
